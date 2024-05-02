@@ -3,10 +3,14 @@ function PlayerCards({ title, cards, onDraw }) {
     <div className="bg-green-200 p-6">
       <h3 className="text-lg font-semibold">{title}</h3>
       <p>Cards:</p>
-      <ul>
+      <ul className="flex gap-1">
         {cards.map((card) => (
           <li key={card.code}>
-            {card.value} of {card.suit}
+            <img
+              src={card.image}
+              alt={`${card.value} of ${card.suit}`}
+              className="w-24"
+            />
           </li>
         ))}
       </ul>
