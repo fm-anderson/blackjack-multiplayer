@@ -12,6 +12,8 @@ export const shuffleNewDeck = async (deckCount = 1) => {
 };
 
 export const drawCards = async (deckId, count = 1) => {
+  if (!deckId) throw new Error("Invalid deck ID");
+
   const response = await fetch(`${baseUrl}/${deckId}/draw/?count=${count}`);
   const data = await response.json();
   return data;
@@ -34,7 +36,16 @@ export const addToPile = async (deckId, pileName, cards) => {
 };
 
 export const listPileCards = async (deckId, pileName) => {
-  const response = await fetch(`${baseUrl}/${deckId}/pile/${pileName}/list/`);
-  const data = await response.json();
-  return data;
+  if (!deckId) throw new Error("Invalid deck ID");
+
+  const url = `${baseUrl}/${deckId}/pile/${pileName}/list/`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    if (response.status === 500) {
+      return { success: false };
+    }
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json();
 };

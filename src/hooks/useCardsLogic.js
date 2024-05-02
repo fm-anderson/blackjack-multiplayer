@@ -26,6 +26,7 @@ function useCardsLogic() {
   const initializeDeck = useCallback(async () => {
     const storedDeckId = getFromLocalStorage("deckId");
     setIsLoading(true);
+
     if (storedDeckId) {
       try {
         const shuffledDeck = await reshuffleDeck(storedDeckId);
@@ -38,8 +39,6 @@ function useCardsLogic() {
         }
       } catch (error) {
         console.error("Failed to reshuffle deck:", error);
-        const newDeck = await shuffleNewDeck();
-        updateDeck(newDeck);
       }
     } else {
       const newDeck = await shuffleNewDeck();
@@ -54,28 +53,38 @@ function useCardsLogic() {
 
   const handleDrawPlayer = async (setPlayerCards, pileName) => {
     if (!deckId || isLoading) return;
-    const playerCardsLength = await getPlayerCardsLengthFromPile(pileName);
-    const cardCount = playerCardsLength === 0 ? 2 : 1;
-    const result = await drawCards(deckId, cardCount);
-    if (result.success) {
-      setCardsRemaining(result.remaining);
-      const cardCodes = result.cards.map((card) => card.code).join(",");
-      const addToPileResult = await addToPile(deckId, pileName, cardCodes);
-      if (addToPileResult.success) {
-        const listOfCardsOnPile = await listPileCards(deckId, pileName);
-        if (listOfCardsOnPile.success) {
-          setPlayerCards(listOfCardsOnPile.piles[pileName].cards);
+
+    try {
+      const playerCardsLength = await getPlayerCardsLengthFromPile(pileName);
+      const cardCount = playerCardsLength === 0 ? 2 : 1;
+      const result = await drawCards(deckId, cardCount);
+
+      if (result.success) {
+        setCardsRemaining(result.remaining);
+        const cardCodes = result.cards.map((card) => card.code).join(",");
+        const addToPileResult = await addToPile(deckId, pileName, cardCodes);
+        if (addToPileResult.success) {
+          const listOfCardsOnPile = await listPileCards(deckId, pileName);
+          if (listOfCardsOnPile.success) {
+            setPlayerCards(listOfCardsOnPile.piles[pileName].cards);
+          }
         }
       }
+    } catch (error) {
+      console.error("Failed to handle draw player:", error);
     }
   };
 
   const getPlayerCardsLengthFromPile = async (pileName) => {
-    const pileData = await listPileCards(deckId, pileName);
-    if (pileData.success && pileData.piles[pileName]) {
-      return pileData.piles[pileName].cards.length;
+    try {
+      const pileData = await listPileCards(deckId, pileName);
+      if (pileData.success && pileData.piles[pileName]) {
+        return pileData.piles[pileName].cards.length;
+      }
+      return 0;
+    } catch (error) {
+      return 0;
     }
-    return 0;
   };
 
   const resetGame = useCallback(async () => {
