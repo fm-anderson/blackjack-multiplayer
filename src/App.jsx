@@ -1,35 +1,18 @@
-import { useState } from "react";
-import { drawCards, addToPile, listPileCards } from "./utils/api";
-import useDeck from "./hooks/useDeck";
+import useCardsLogic from "./hooks/useCardsLogic";
 import PlayerCards from "./components/PlayerCards";
 
 function App() {
-  const { deckId, cardsRemaining, setCardsRemaining, isLoading, resetGame } =
-    useDeck();
-  const [playerACards, setPlayerACards] = useState([]);
-  const [playerBCards, setPlayerBCards] = useState([]);
-
-  const handleDrawPlayer = async (setPlayerCards, playerCards, pileName) => {
-    if (!deckId || isLoading) return;
-    const cardCount = playerCards.length === 0 ? 2 : 1;
-    const result = await drawCards(deckId, cardCount);
-    if (result.success) {
-      setPlayerCards(playerCards.concat(result.cards));
-      setCardsRemaining(result.remaining);
-
-      const cardCodes = result.cards.map((card) => card.code).join(",");
-      const addToPileResult = await addToPile(deckId, pileName, cardCodes);
-      const listOfCardsOnPile = await listPileCards(deckId, pileName);
-
-      if (!addToPileResult.success) {
-        console.error("Failed to add cards to pile:", addToPileResult);
-      }
-    }
-  };
-
-  const handleResetGame = async () => {
-    resetGame();
-  };
+  const {
+    deckId,
+    isLoading,
+    playerACards,
+    playerBCards,
+    cardsRemaining,
+    handleDrawPlayer,
+    setPlayerACards,
+    setPlayerBCards,
+    resetGame,
+  } = useCardsLogic();
 
   return (
     <div className="p-4">
@@ -43,22 +26,18 @@ function App() {
           <PlayerCards
             title="Player 1"
             cards={playerACards}
-            onDraw={() =>
-              handleDrawPlayer(setPlayerACards, playerACards, "pileA")
-            }
+            onDraw={() => handleDrawPlayer(setPlayerACards, "pileA")}
           />
           <PlayerCards
             title="Player 2"
             cards={playerBCards}
-            onDraw={() =>
-              handleDrawPlayer(setPlayerBCards, playerBCards, "pileB")
-            }
+            onDraw={() => handleDrawPlayer(setPlayerBCards, "pileB")}
           />
         </div>
       )}
       <button
         className="mt-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={handleResetGame}
+        onClick={resetGame}
       >
         Reset
       </button>
