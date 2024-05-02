@@ -1,21 +1,18 @@
 import { useMemo } from "react";
 import CardBack from "./CardBack";
+import { calculatePoints } from "../utils/helper";
 
 function PlayerCards({ title, cards, onDraw }) {
-  const calculatePoints = (cards) => {
-    return cards.reduce((total, card) => {
-      if (["KING", "QUEEN", "JOKER"].includes(card.value)) {
-        return total + 10;
-      }
-      return total + parseInt(card.value, 10) || 0;
-    }, 0);
-  };
-
   const points = useMemo(() => calculatePoints(cards), [cards]);
+  const activeButton = "bg-blue-500 hover:bg-blue-700";
+  const disabledButton = "bg-slate-500 opacity-60";
 
   return (
     <div className="bg-green-200 p-6">
-      <h3 className="mb-4 text-center text-lg font-semibold">{title}</h3>
+      <h3 className="text-center text-lg font-semibold">{title}</h3>
+      <p className="mb-4 rounded border-2 border-slate-500 bg-transparent px-4 py-2 font-bold">
+        Points: {points}
+      </p>
       <ul className="flex gap-1">
         {cards.length === 0 ? (
           <>
@@ -34,16 +31,20 @@ function PlayerCards({ title, cards, onDraw }) {
           ))
         )}
       </ul>
-      <div className="mt-4 flex justify-between">
+      <div className="mt-4 flex gap-2">
         <button
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          className={`rounded px-4 py-2 font-bold text-white ${points >= 21 ? disabledButton : activeButton}`}
           onClick={onDraw}
+          disabled={points >= 21}
         >
-          Draw
+          Deal
         </button>
-        <p className="rounded bg-slate-500 px-4 py-2 font-bold text-white">
-          Points: {points}
-        </p>
+        <button
+          className={`rounded px-4 py-2 font-bold text-white ${points >= 21 ? disabledButton : activeButton}`}
+          // onClick={TODO}
+        >
+          Stand
+        </button>
       </div>
     </div>
   );
