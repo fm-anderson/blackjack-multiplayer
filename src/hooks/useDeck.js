@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { shuffleNewDeck, reshuffleDeck } from "../utils/api";
 import { getFromLocalStorage, saveToLocalStorage } from "../utils/helper";
 
@@ -39,7 +39,21 @@ function useDeck() {
     initializeDeck();
   }, []);
 
-  return { deckId, cardsRemaining, setCardsRemaining, isLoading };
+  const resetGame = useCallback(async () => {
+    if (!deckId) return;
+    const response = await reshuffleDeck(deckId);
+    if (response.success) {
+      setCardsRemaining(response.remaining);
+    }
+  }, [deckId]);
+
+  return {
+    deckId,
+    cardsRemaining,
+    setCardsRemaining,
+    isLoading,
+    resetGame,
+  };
 }
 
 export default useDeck;

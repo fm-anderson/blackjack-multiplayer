@@ -38,9 +38,3 @@ export const listPileCards = async (deckId, pileName) => {
   const data = await response.json();
   return data;
 };
-
-const returnCardsToDeck = async (deckId, cards) => {
-  const response = await fetch(`${baseUrl}/${deckId}/return/?cards=${cards}`);
-  const data = await response.json();
-  return data;
-};

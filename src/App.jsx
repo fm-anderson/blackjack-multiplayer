@@ -4,7 +4,8 @@ import useDeck from "./hooks/useDeck";
 import PlayerCards from "./components/PlayerCards";
 
 function App() {
-  const { deckId, cardsRemaining, setCardsRemaining, isLoading } = useDeck();
+  const { deckId, cardsRemaining, setCardsRemaining, isLoading, resetGame } =
+    useDeck();
   const [playerACards, setPlayerACards] = useState([]);
   const [playerBCards, setPlayerBCards] = useState([]);
 
@@ -24,6 +25,10 @@ function App() {
         console.error("Failed to add cards to pile:", addToPileResult);
       }
     }
+  };
+
+  const handleResetGame = async () => {
+    resetGame();
   };
 
   return (
@@ -51,6 +56,12 @@ function App() {
           />
         </div>
       )}
+      <button
+        className="mt-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        onClick={handleResetGame}
+      >
+        Reset
+      </button>
     </div>
   );
 }
