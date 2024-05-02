@@ -25,7 +25,7 @@ export const reshuffleDeck = async (deckId, remaining = false) => {
   return data;
 };
 
-const addToPile = async (deckId, pileName, cards) => {
+export const addToPile = async (deckId, pileName, cards) => {
   const response = await fetch(
     `${baseUrl}/${deckId}/pile/${pileName}/add/?cards=${cards}`,
   );
@@ -33,15 +33,7 @@ const addToPile = async (deckId, pileName, cards) => {
   return data;
 };
 
-const shufflePile = async (deckId, pileName) => {
-  const response = await fetch(
-    `${baseUrl}/${deckId}/pile/${pileName}/shuffle/`,
-  );
-  const data = await response.json();
-  return data;
-};
-
-const listPileCards = async (deckId, pileName) => {
+export const listPileCards = async (deckId, pileName) => {
   const response = await fetch(`${baseUrl}/${deckId}/pile/${pileName}/list/`);
   const data = await response.json();
   return data;
