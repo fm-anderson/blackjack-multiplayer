@@ -4,14 +4,14 @@ import PlayerCards from "./components/PlayerCards";
 function App() {
   const {
     deckId,
+    cardsRemaining,
     isLoading,
     playerACards,
     playerBCards,
-    cardsRemaining,
     handleDrawPlayer,
+    resetGame,
     setPlayerACards,
     setPlayerBCards,
-    resetGame,
   } = useCardsLogic();
 
   return (

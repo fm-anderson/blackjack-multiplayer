@@ -42,6 +42,7 @@ function PlayerCards({ title, cards, onDraw }) {
         <button
           className={`rounded px-4 py-2 font-bold text-white ${points >= 21 ? disabledButton : activeButton}`}
           // onClick={TODO}
+          disabled={points >= 21}
         >
           Stand
         </button>
