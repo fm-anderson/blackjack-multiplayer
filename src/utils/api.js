@@ -25,20 +25,6 @@ export const reshuffleDeck = async (deckId, remaining = false) => {
   return data;
 };
 
-const createNewDeck = async (jokersEnabled = false) => {
-  const response = await fetch(
-    `${baseUrl}/new/${jokersEnabled ? "?jokers_enabled=true" : ""}`,
-  );
-  const data = await response.json();
-  return data;
-};
-
-const shufflePartialDeck = async (cards) => {
-  const response = await fetch(`${baseUrl}/new/shuffle/?cards=${cards}`);
-  const data = await response.json();
-  return data;
-};
-
 const addToPile = async (deckId, pileName, cards) => {
   const response = await fetch(
     `${baseUrl}/${deckId}/pile/${pileName}/add/?cards=${cards}`,
@@ -57,15 +43,6 @@ const shufflePile = async (deckId, pileName) => {
 
 const listPileCards = async (deckId, pileName) => {
   const response = await fetch(`${baseUrl}/${deckId}/pile/${pileName}/list/`);
-  const data = await response.json();
-  return data;
-};
-
-const drawFromPile = async (deckId, pileName, cards) => {
-  const url = cards
-    ? `${baseUrl}/${deckId}/pile/${pileName}/draw/?cards=${cards}`
-    : `${baseUrl}/${deckId}/pile/${pileName}/draw/?count=2`;
-  const response = await fetch(url);
   const data = await response.json();
   return data;
 };
