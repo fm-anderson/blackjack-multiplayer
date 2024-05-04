@@ -1,4 +1,5 @@
-import useCardsLogic from "./hooks/useCardsLogic";
+import { useState } from "react";
+import useDeckOfCards from "./hooks/useDeckOfCards";
 import PlayerCards from "./components/PlayerCards";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
     resetGame,
     setPlayerACards,
     setPlayerBCards,
-  } = useCardsLogic();
+  } = useDeckOfCards();
 
   return (
     <div className="p-4">

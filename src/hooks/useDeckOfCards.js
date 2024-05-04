@@ -8,7 +8,7 @@ import {
 } from "../utils/api";
 import { getFromLocalStorage, saveToLocalStorage } from "../utils/helper";
 
-function useCardsLogic() {
+function useDeckOfCards() {
   const [deckId, setDeckId] = useState(null);
   const [cardsRemaining, setCardsRemaining] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -110,4 +110,4 @@ function useCardsLogic() {
   };
 }
 
-export default useCardsLogic;
+export default useDeckOfCards;
