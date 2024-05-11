@@ -13,24 +13,20 @@ function PlayerView({ title, pileCards, onDraw, onStand }) {
   const isStand = useMemo(() => cards[0]?.pileName?.includes("stand"), [cards]);
 
   useEffect(() => {
-    if (isStand) {
-      setStand(true);
-    } else {
-      setStand(false);
-    }
-  }, [cards]);
+    setStand(isStand);
+  }, [isStand]);
 
   useEffect(() => {
     if (points > 21 && !isStand) {
       handleStand();
     }
-  }, [points, stand]);
+  }, [points, isStand]);
 
   const handleDeal = () => {
     if (cards.length === 0) {
       onDraw(title, 2);
     } else {
-      onDraw(title);
+      onDraw(title, 1);
     }
   };
 
