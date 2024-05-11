@@ -1,39 +1,49 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { calculatePoints } from "../utils/helper";
 import ActionButton from "./ActionButton";
 import CardBack from "./CardBack";
+import PropTypes from "prop-types";
 
 function PlayerView({ title, pileCards, onDraw, onStand }) {
   const [stand, setStand] = useState(false);
-  const cards = pileCards.filter(
-    (card) => card.pileName === title || card.pileName === `stand_${title}`,
-  );
 
-  const points = useMemo(() => calculatePoints(cards), [cards]);
-  const isStand = useMemo(() => cards[0]?.pileName?.includes("stand"), [cards]);
+  const cards = useMemo(() => {
+    return pileCards.filter(
+      (card) => card.pileName === title || card.pileName === `stand_${title}`,
+    );
+  }, [pileCards, title]);
+
+  const isStand = useMemo(() => {
+    return cards.length > 0 && cards[0].pileName.includes("stand");
+  }, [cards]);
+
+  const points = useMemo(() => {
+    return calculatePoints(cards);
+  }, [cards]);
+
+  const handleStand = useCallback(() => {
+    const codes = cards.map((card) => card.code).join(",");
+    onStand(title, `stand_${title}`, codes);
+  }, [cards, onStand, title]);
+
+  const handleDeal = useCallback(() => {
+    if (cards.length === 0) {
+      onDraw(title, 2);
+    } else {
+      onDraw(title, 1);
+    }
+  }, [cards.length, onDraw, title]);
 
   useEffect(() => {
     setStand(isStand);
   }, [isStand]);
 
   useEffect(() => {
-    if (points > 21 && !isStand) {
+    if (points > 21 && !isStand && !stand) {
       handleStand();
+      setStand(true);
     }
-  }, [points, isStand]);
-
-  const handleDeal = () => {
-    if (cards.length === 0) {
-      onDraw(title, 2);
-    } else {
-      onDraw(title, 1);
-    }
-  };
-
-  const handleStand = () => {
-    const codes = cards.map((card) => card.code).join(",");
-    onStand(title, `stand_${title}`, codes);
-  };
+  }, [points, isStand, handleStand, stand]);
 
   return (
     <div className="bg-green-200 p-6">
@@ -76,5 +86,12 @@ function PlayerView({ title, pileCards, onDraw, onStand }) {
     </div>
   );
 }
+
+PlayerView.propTypes = {
+  title: PropTypes.string.isRequired,
+  pileCards: PropTypes.array.isRequired,
+  onDraw: PropTypes.func.isRequired,
+  onStand: PropTypes.func.isRequired,
+};
 
 export default PlayerView;

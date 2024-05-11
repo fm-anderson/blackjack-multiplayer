@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 function ActionButton({ title, action, points, stand }) {
   return (
     <button
@@ -9,5 +11,12 @@ function ActionButton({ title, action, points, stand }) {
     </button>
   );
 }
+
+ActionButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  action: PropTypes.func.isRequired,
+  points: PropTypes.number.isRequired,
+  stand: PropTypes.bool.isRequired,
+};
 
 export default ActionButton;
