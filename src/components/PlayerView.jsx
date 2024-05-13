@@ -3,9 +3,11 @@ import { calculatePoints } from "../utils/helper";
 import ActionButton from "./ActionButton";
 import CardBack from "./CardBack";
 import PropTypes from "prop-types";
+import BetButton from "./BetButton";
 
 function PlayerView({ title, pileCards, onDraw, onStand }) {
   const [stand, setStand] = useState(false);
+  const [wallet, setWallet] = useState(500);
 
   const cards = useMemo(() => {
     return pileCards.filter(
@@ -47,10 +49,26 @@ function PlayerView({ title, pileCards, onDraw, onStand }) {
 
   return (
     <div className="bg-green-200 p-6">
-      <h3 className="text-center text-lg font-semibold">{title}</h3>
-      <p className="mb-4 rounded border-2 border-slate-500 bg-transparent px-4 py-2 font-bold">
-        Points: {points}
-      </p>
+      <h3 className="text-center text-lg font-semibold">
+        {title} {points > 0 && <span>{points}</span>}
+      </h3>
+      <div className="mb-2 flex rounded border-2 border-slate-500 bg-transparent px-4 py-2 font-bold">
+        <span>
+          <p>Wallet: ${wallet}</p>
+        </span>
+      </div>
+      <div className="mb-4 flex justify-start gap-2">
+        {[10, 25, 50].map((amount) => (
+          <BetButton
+            key={amount}
+            amount={amount}
+            action={setWallet}
+            wallet={wallet}
+            stand={stand}
+            cards={pileCards}
+          />
+        ))}
+      </div>
       <ul className="flex gap-1">
         {cards.length === 0 ? (
           <>
@@ -71,13 +89,13 @@ function PlayerView({ title, pileCards, onDraw, onStand }) {
       </ul>
       <div className="mt-4 flex gap-2">
         <ActionButton
-          title="Deal"
+          title={"Deal"}
           action={handleDeal}
           points={points}
           stand={stand}
         />
         <ActionButton
-          title="Stand"
+          title={"Stand"}
           action={handleStand}
           points={points}
           stand={stand}
