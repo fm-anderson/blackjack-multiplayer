@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 function BetButton({ amount, wallet, stand, action, cards }) {
   return (
     <button
@@ -9,5 +11,13 @@ function BetButton({ amount, wallet, stand, action, cards }) {
     </button>
   );
 }
+
+BetButton.propTypes = {
+  amount: PropTypes.number.isRequired,
+  wallet: PropTypes.number.isRequired,
+  stand: PropTypes.bool.isRequired,
+  action: PropTypes.func.isRequired,
+  cards: PropTypes.array.isRequired,
+};
 
 export default BetButton;

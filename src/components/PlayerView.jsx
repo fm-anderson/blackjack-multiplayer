@@ -2,8 +2,8 @@ import { useMemo, useState, useEffect, useCallback } from "react";
 import { calculatePoints } from "../utils/helper";
 import ActionButton from "./ActionButton";
 import CardBack from "./CardBack";
-import PropTypes from "prop-types";
 import BetButton from "./BetButton";
+import PropTypes from "prop-types";
 
 function PlayerView({ title, pileCards, onDraw, onStand }) {
   const [stand, setStand] = useState(false);
