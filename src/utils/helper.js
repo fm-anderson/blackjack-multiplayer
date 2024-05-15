@@ -28,3 +28,26 @@ export const calculatePoints = (cards) => {
 
   return total;
 };
+
+export function addToPrizePot(value) {
+  try {
+    const existingValue = localStorage.getItem("prizepot");
+    if (existingValue !== null) {
+      const parsedValue = JSON.parse(existingValue);
+      const updatedValue = parsedValue + value;
+      localStorage.setItem("prizepot", JSON.stringify(updatedValue));
+    } else {
+      localStorage.setItem("prizepot", JSON.stringify(value));
+    }
+  } catch (error) {
+    console.error("Error updating localStorage:", error);
+  }
+}
+
+export function resetPrizePot() {
+  try {
+    localStorage.setItem("prizepot", JSON.stringify(0));
+  } catch (error) {
+    console.error("Error resetting prize pot in localStorage:", error);
+  }
+}

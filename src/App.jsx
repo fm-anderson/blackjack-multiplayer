@@ -1,5 +1,6 @@
 import useDeckOfCards from "usedeckofcards";
 import PlayerView from "./components/PlayerView";
+import { resetPrizePot } from "./utils/helper";
 
 function App() {
   const {
@@ -11,6 +12,11 @@ function App() {
     drawAndAddToPile,
     moveCardsBetweenPiles,
   } = useDeckOfCards();
+
+  const handleNewGame = () => {
+    resetGame();
+    resetPrizePot();
+  };
 
   return (
     <div className="p-4">
@@ -37,7 +43,7 @@ function App() {
       </div>
       <button
         className="mt-2 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={() => resetGame()}
+        onClick={handleNewGame}
       >
         Play Again
       </button>
